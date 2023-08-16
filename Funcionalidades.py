@@ -1,34 +1,43 @@
+import Cliente
+
+
 class Banco():
-    def __init__(self, nome_cliente, senha):
-        self.conta = "001-01"
-        self.agencia = "1015-10"
-        self.nome_cliente = nome_cliente
-        self.senha = senha
+    def __init__(self):
         self.saldo = 0.0
         self.extrato = []
         self.numero_saque = 0
+        self.clientes = []
+        self.contas = [1]
+        self.cliente = '';
 
-    def validar_senha(self):
-        senha_cadastrada = "12345"
-        cliente_cadastrado = "Ana"
+    def validar_senha(self, nome, cpf):
 
-        if self.senha == senha_cadastrada and self.nome_cliente == cliente_cadastrado:
-            return True
-        else:
-            return False
+        for user in self.clientes:
+            if user.cpf == cpf and user.nome == nome:
+                self.cliente = user.nome
+                return True
+            else:
+                return False
+
+    def criar_conta(self):
+        conta = Cliente.Conta()
+        cliente = Cliente.Usuario()
+        retorno = conta.criar_conta(cliente, self.contas)
+        self.contas = retorno
 
     def deposito(self, valor):
-        self.saldo =+ valor
+        self.saldo += valor
         print(self.saldo)
         self.extrato.append(valor)
         print("Valor depositado com sucesso")
 
-    def saque(self, valor):
-        if self.numero_saque <= 3:
+    def saque(self, valor=0):
+
+        if self.numero_saque < 3:
             if self.saldo >= valor:
-                self.saldo =- valor
+                self.saldo -= valor
                 self.extrato.append("-" + str(valor))
-                self.numero_saque =+ 1
+                self.numero_saque += 1
                 print("Saque realizado com sucesso!")
             else:
                 print("Saldo insuficiente! ")
@@ -36,7 +45,7 @@ class Banco():
             print("Máximo de saques diários excedidos!")
 
     def extrair(self):
-        print("------------Extrato DIO Bank------------\nCLiente: {}".format(self.nome_cliente))
+        print("------------Extrato DIO Bank------------\nCLiente: {}".format(self.cliente))
         if len(self.extrato) >= 1:
             for i in self.extrato:
                 if isinstance(i, str):
@@ -50,7 +59,7 @@ class Banco():
             print("Não foram realizadas movimentações!")
         print("------------Extrato DIO Bank------------")
     def menu(self):
-        retorno = input("Qual operação você deseja realizar:\n s - Saque\n e - Extrato\n d - Depósito")
+        retorno = input("Qual operação você deseja realizar:\n s - Saque\n e - Extrato\n d - Depósito\n F - Finalizar")
         return retorno
 
 
